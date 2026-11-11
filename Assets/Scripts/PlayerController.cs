@@ -1,31 +1,62 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class PlayerController : MonoBehaviour
 {
+    [Header("Objects")]
     public CharacterController controller;
+    public PlayerInput playerInput;
+    public Animator animator;
 
-    public float moveSpeed;
+    [Header("Controls")] 
+    public float playerSpeed = 5.0f;
 
-    private Vector2 _moveDirection;
+    public float jumpHeight = 0.8f;
+    public float gravityMultiplier = 1.0f;
+    public float rotationSpeed = 5.0f;
+
+    [Header("State Machine")] 
+    public StateMachine movementSM;
+
+    public IdleState idleState;
+    public MoveState moveState;
+    public JumpState jumpState;
+    public GrappleState grappleState;
     
-    [Header("Player Input References")]
-    public InputActionReference move;
+    [Header("Input Action References")] 
+    public InputActionReference moveReference;
+    public InputActionReference jumpReference;
+    public InputActionReference grappleReference; // Unused for now
+
+    [HideInInspector] public float gravityValue = -9.8f;
+    [HideInInspector] public Transform cameraTransform;
+    [HideInInspector] public Vector3 playerVelocity;
+    
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        cameraTransform = GetComponent<Camera>().transform;
+        gravityValue *= gravityMultiplier;
+
+        movementSM = new StateMachine();
+        idleState = new IdleState(this, movementSM);
+        moveState = new MoveState(this, movementSM);
+        jumpState = new JumpState(this, movementSM);
+        grappleState = new GrappleState(this, movementSM);
     }
 
+    // eeeehhhhhhh
     private void Update()
     {
-        MovePlayer();
+        movementSM.currentState.HandleInput();
+        movementSM.currentState.StateUpdate();
     }
-    
-    private void MovePlayer()
+
+    private void FixedUpdate()
     {
-        Vector2 direction = move.action.ReadValue<Vector2>();
-        transform.position += new Vector3(direction.x, 0, direction.y) * (moveSpeed * Time.deltaTime);
+        movementSM.currentState.StateFixedUpdate();
     }
 }
