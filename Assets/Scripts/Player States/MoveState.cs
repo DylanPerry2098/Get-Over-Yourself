@@ -28,11 +28,14 @@ public class MoveState : State
         {
             stateMachine.ChangeState(player.fallState);
         }
-        
 
-        playerTransform = player.transform;
-        player.direction = (playerTransform.right * moveInput.x) + (playerTransform.forward * moveInput.y);
-        player.direction.y = player.yVelocity;
-        player.controller.Move(player.direction * (player.playerSpeed * Time.deltaTime));
+
+        Transform transform = player.transform;
+        Vector3 horizontal = (transform.right * moveInput.x + transform.forward * moveInput.y) * player.playerSpeed;
+        player.direction = horizontal;
+
+        Vector3 velocity = horizontal;
+        velocity.y = groundingForce;
+        player.controller.Move(velocity * Time.deltaTime);
     }
 }

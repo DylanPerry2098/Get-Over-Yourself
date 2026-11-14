@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
     public float playerSpeed = 5.0f;
     public float jumpHeight = 3f;
     public float gravityMultiplier = 1.0f;
-    public float maxFallSpeed = 15f;
+    public float maxFallSpeed = -15f;
     public float groundCastDistance = 0.5f;
 
     // [Header("Smoothing")] 

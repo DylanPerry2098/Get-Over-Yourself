@@ -6,6 +6,7 @@ public class IdleState : State
     public override void Enter()
     {
         base.Enter();
+        player.direction = Vector3.zero;
     }
 
     // ReSharper disable Unity.PerformanceAnalysis
@@ -32,6 +33,8 @@ public class IdleState : State
         {
             stateMachine.ChangeState(player.moveState);
         }
+        
+        player.controller.Move(Vector3.up * (groundingForce * Time.deltaTime));
 
     
     }

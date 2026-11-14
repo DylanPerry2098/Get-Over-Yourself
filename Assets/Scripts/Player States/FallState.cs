@@ -3,25 +3,38 @@ using UnityEngine;
 public class FallState : State
 {
     // ReSharper disable Unity.PerformanceAnalysis
+    
+    public override void Enter()
+    {
+        base.Enter();
+        
+    }
+
     public override void StateUpdate()
     {
         base.StateUpdate();
         
-        if (isGrounded && inputHandler.GetMovement().magnitude > 0)
+        if (isGrounded && player.yVelocity <= 0)
         {
-            stateMachine.ChangeState(player.moveState);
-        }
-        else if (isGrounded)
-        {
-            stateMachine.ChangeState(player.idleState);
+            player.yVelocity = groundingForce;
+            if (moveInput.magnitude > 0)
+            {
+                stateMachine.ChangeState(player.moveState);
+            }
+            else
+            {
+                stateMachine.ChangeState(player.idleState);
+            }
+            
         }
 
-        // if (player.yVelocity < player.maxFallSpeed)
-        // {
-            player.yVelocity += player.gravityValue;
-            player.direction.y = player.yVelocity * Time.deltaTime;
-        // }
-        player.controller.Move(player.direction);
+        
+        player.yVelocity += player.gravityValue * Time.deltaTime;
+        player.yVelocity = Mathf.Max(player.yVelocity, player.maxFallSpeed);
+
+        Vector3 velocity = player.direction;
+        velocity.y = player.yVelocity;
+        player.controller.Move(velocity * Time.deltaTime);
     }
     
 }

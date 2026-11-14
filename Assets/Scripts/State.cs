@@ -9,11 +9,12 @@ public class State: MonoBehaviour
     
     protected Vector2 moveInput;
     protected bool isGrounded;
-    protected float groundingForce = 2.0f;
+    protected float yVelocity;
+    protected float groundingForce = -2.0f;
     
     public virtual void Enter()
     {
-        Debug.Log("enter state: " + ToString());
+        // Debug.Log("enter state: " + ToString());
     }
 
     public virtual void StateUpdate()
