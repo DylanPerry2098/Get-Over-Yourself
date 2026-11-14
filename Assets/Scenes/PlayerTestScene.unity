@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 116247805}
   - component: {fileID: 116247804}
   - component: {fileID: 116247807}
+  - component: {fileID: 116247808}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -256,6 +257,22 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &116247808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 116247803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8458c27c843504d40bcee59a57195236, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraController
+  playerTransform: {fileID: 753697624}
+  mainCamera: {fileID: 116247805}
+  inputHandler: {fileID: 753697636}
+  mouseSensitivity: 1
 --- !u!1 &363764752
 GameObject:
   m_ObjectHideFlags: 0
@@ -842,6 +859,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InputHandler
   moveActionRef: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  lookActionRef: {fileID: -5630151704836100654, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   jumpActionRef: {fileID: -2099379676528639254, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   interactActionRef: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   grappleActionRef: {fileID: 8875874648457574744, guid: 052faaac586de48259a63d0c4782560b, type: 3}

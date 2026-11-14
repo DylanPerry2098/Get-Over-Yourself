@@ -12,8 +12,8 @@ public class InputHandler : MonoBehaviour
     
     public Vector3 GetMovement()
     {
-        Vector2 movement =  moveActionRef.action.ReadValue<Vector2>();
-        return new Vector3(movement.x, 0, movement.y);
+        Vector2 movementInput =  moveActionRef.action.ReadValue<Vector2>();
+        return movementInput;
     }
 
     public Vector2 GetMouseDirection()

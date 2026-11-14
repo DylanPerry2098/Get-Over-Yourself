@@ -6,10 +6,10 @@ public class State: MonoBehaviour
     public PlayerController player;
     public StateMachine stateMachine;
     public InputHandler inputHandler;
-
-    protected Vector3 gravityVelocity;
-    protected Vector3 velocity;
-    protected Vector2 input;
+    
+    protected Vector2 moveInput;
+    protected bool isGrounded;
+    protected float groundingForce = 2.0f;
     
     public virtual void Enter()
     {
@@ -18,7 +18,8 @@ public class State: MonoBehaviour
 
     public virtual void StateUpdate()
     {
-        
+        isGrounded = player.controller.isGrounded;
+        moveInput = inputHandler.GetMovement();
     }
 
     public virtual void StateFixedUpdate()

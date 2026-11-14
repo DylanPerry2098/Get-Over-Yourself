@@ -19,7 +19,7 @@ public class CameraController : MonoBehaviour
         // Rotate Camera around Local X Axis
         cameraVerticalRotation -= inputY;
         cameraVerticalRotation = Mathf.Clamp(cameraVerticalRotation, -90, 90);
-        transform.localEulerAngles = Vector3.right * cameraVerticalRotation; // TODO: Use quaternions
+        transform.localEulerAngles = Vector3.right * cameraVerticalRotation; 
         
         // Rotate Camera and Player around Local Y Axis
         
