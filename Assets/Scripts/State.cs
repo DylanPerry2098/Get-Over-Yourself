@@ -1,49 +1,25 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class State : MonoBehaviour
+public class State: MonoBehaviour
 {
     public PlayerController player;
     public StateMachine stateMachine;
-
-    protected Vector3 gravityVelocity;
-    protected Vector3 velocity;
-    protected Vector2 input;
-
-    // There may be a better way of doing this
-    public InputActionReference move;
-    public InputActionReference jump;
-    public InputActionReference grapple; // Unused for now
-
-    public State(PlayerController _player, StateMachine _stateMachine)
-    {
-        player = _player;
-        stateMachine = _stateMachine;
-
-        move = player.moveReference;
-        jump = player.jumpReference;
-        grapple = player.grappleReference;
-
-    }
+    public InputHandler inputHandler;
+    
+    protected Vector2 moveInput;
+    protected bool isGrounded;
+    protected float groundingForce = -2.0f;
     
     public virtual void Enter()
     {
         Debug.Log("enter state: " + ToString());
     }
 
-    public virtual void HandleInput()
-    {
-        
-    }
-
-    private void CheckTransition()
-    {
-        
-    }
-
     public virtual void StateUpdate()
     {
-        
+        isGrounded = player.controller.isGrounded;
+        moveInput = inputHandler.GetMovement();
     }
 
     public virtual void StateFixedUpdate()

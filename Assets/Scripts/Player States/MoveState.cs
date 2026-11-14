@@ -3,38 +3,39 @@ using UnityEngine.InputSystem;
 
 public class MoveState : State
 {
-
-    public MoveState(PlayerController player, StateMachine _stateMachine): base(player, _stateMachine)
+    private Transform playerTransform;
+    public override void Enter()
     {
-        base.player = player;
-        stateMachine = _stateMachine;
-
-        // There may be a better way of doing this
-
+        base.Enter();
+        
     }
     
-    public virtual void Enter()
+    public override void StateUpdate()
     {
-        Debug.Log("enter state: " + ToString());
-    }
-
-    public void HandleInput()
-    {
+        base.StateUpdate();
         
-    }
+        if (moveInput.magnitude <= 0)
+        {
+            stateMachine.ChangeState(player.idleState);
+        }
 
-    public void StateUpdate()
-    {
-        
-    }
+        if (inputHandler.WantsToJump() && isGrounded)
+        {
+            stateMachine.ChangeState(player.jumpState);
+        }
 
-    public void StateFixedUpdate()
-    {
-        
-    }
+        if (!isGrounded)
+        {
+            stateMachine.ChangeState(player.fallState);
+        }
 
-    public void Exit()
-    {
-        
+
+        Transform transform = player.transform;
+        Vector3 horizontal = (transform.right * moveInput.x + transform.forward * moveInput.y) * player.playerSpeed;
+        player.direction = horizontal;
+
+        Vector3 velocity = horizontal;
+        velocity.y = groundingForce;
+        player.controller.Move(velocity * Time.deltaTime);
     }
 }

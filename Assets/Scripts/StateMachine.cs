@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
 
-public class StateMachine : MonoBehaviour
+public class StateMachine: MonoBehaviour
 {
-    public State currentState;
+    [HideInInspector] public State currentState;
 
     public void Initialize(State startingState)
     {
@@ -16,5 +16,15 @@ public class StateMachine : MonoBehaviour
 
         currentState = newState;
         newState.Enter();
+    }
+
+    private void Update()
+    {
+        currentState.StateUpdate();
+    }
+
+    private void FixedUpdate()
+    {
+        currentState.StateFixedUpdate();
     }
 }

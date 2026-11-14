@@ -2,33 +2,41 @@ using UnityEngine;
 
 public class IdleState : State
 {
-    public IdleState(PlayerController _player, StateMachine _stateMachine) : base(_player, _stateMachine)
+    
+    public override void Enter()
     {
-        player = _player;
-        stateMachine = _stateMachine;
-    }
-    public virtual void Enter()
-    {
-        Debug.Log("enter state: " + ToString());
+        base.Enter();
+        player.direction = Vector3.zero;
     }
 
-    public void HandleInput()
+    // ReSharper disable Unity.PerformanceAnalysis
+    public override void StateUpdate()
     {
+        base.StateUpdate();
         
-    }
+        if (inputHandler.WantsToJump() && isGrounded)
+        {
+            stateMachine.ChangeState(player.jumpState);
+        }
 
-    public void StateUpdate()
-    {
+        if (!isGrounded)
+        {
+            stateMachine.ChangeState(player.fallState);
+        }
         
-    }
+        if (inputHandler.WantsToGrapple())
+        {
+            stateMachine.ChangeState(player.grappleState);
+        }
 
-    public void StateFixedUpdate()
-    {
+        if (inputHandler.GetMovement().magnitude > 0)
+        {
+            stateMachine.ChangeState(player.moveState);
+        }
         
-    }
+        // Keeps player grounded with downwards force
+        player.controller.Move(Vector3.up * (groundingForce * Time.deltaTime));
 
-    public void Exit()
-    {
-        
+    
     }
 }
