@@ -34,12 +34,9 @@ public class IdleState : State
             stateMachine.ChangeState(player.moveState);
         }
         
+        // Keeps player grounded with downwards force
         player.controller.Move(Vector3.up * (groundingForce * Time.deltaTime));
 
     
-    }
-    public override void Exit()
-    {
-        base.Exit();
     }
 }

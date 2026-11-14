@@ -11,20 +11,19 @@ public class PlayerController : MonoBehaviour
 
     [Header("Controls")] 
     public float playerSpeed = 5.0f;
-    public float jumpHeight = 3f;
-    public float gravityMultiplier = 1.0f;
-    public float maxFallSpeed = -15f;
-    public float groundCastDistance = 0.5f;
+    public float jumpHeight = 10f;
+    public float gravityMultiplier = 3.0f;
+    public float maxFallSpeed = -25f;
 
-    // [Header("Smoothing")] 
+    [Header("Smoothing")] 
     // [Range(0, 1)] 
     // public float speedDampTime = 0.1f;
     // [Range(0, 1)] 
     // public float velocityDampTime = 0.9f;
     // [Range(0, 1)] 
     // public float rotationDampTime = 0.2f;
-    // [Range(0, 1)] 
-    // public float airControl = 0.5f;
+    [Range(0, 1)] 
+    public float airControl = 0.75f;
     
     [Header("State Machine")] 
     public StateMachine movementSM;
@@ -37,7 +36,6 @@ public class PlayerController : MonoBehaviour
     public GrappleState grappleState;
 
     [HideInInspector] public float gravityValue = -9.8f;
-    [HideInInspector] public Transform cameraTransform;
     [HideInInspector] public Vector3 direction;
     [HideInInspector] public float yVelocity;
     
@@ -45,15 +43,7 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        cameraTransform = GameObject.FindGameObjectWithTag("MainCamera").transform;
-        gravityValue *= gravityMultiplier;
         yVelocity = -2.0f;
-        
         movementSM.Initialize(idleState);
-    }
-
-    private void Update()
-    {
-        
     }
 }
