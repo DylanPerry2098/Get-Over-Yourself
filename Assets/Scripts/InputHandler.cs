@@ -8,7 +8,10 @@ public class InputHandler : MonoBehaviour
     public InputActionReference lookActionRef;
     public InputActionReference jumpActionRef;
     public InputActionReference interactActionRef;
-    public InputActionReference grappleActionRef; // Unused for now
+    public InputActionReference grappleActionRef;
+    public InputActionReference retractActionRef;
+    public InputActionReference extendActionRef;
+    public InputActionReference slowmoActionRef;
     
     public Vector3 GetMovement()
     {
@@ -35,4 +38,20 @@ public class InputHandler : MonoBehaviour
     {
         return grappleActionRef.action.triggered;
     }
+
+    public bool WantsToRetract()
+    {
+        return retractActionRef.action.inProgress;
+    }
+
+    public bool WantsToExtend()
+    {
+        return extendActionRef.action.inProgress;
+    }
+
+    public bool WantsToSlowmo()
+    {
+        return slowmoActionRef.action.inProgress;
+    }
+    
 }

@@ -3,10 +3,10 @@ using UnityEngine.InputSystem;
 
 public class MoveState : State
 {
-    private Transform playerTransform;
     public override void Enter()
     {
         base.Enter();
+        player.velocity = Vector3.zero;
         
     }
     
@@ -17,16 +17,20 @@ public class MoveState : State
         if (moveInput.magnitude <= 0)
         {
             stateMachine.ChangeState(player.idleState);
+            return;
         }
 
         if (inputHandler.WantsToJump() && isGrounded)
         {
             stateMachine.ChangeState(player.jumpState);
+            return;
         }
 
         if (!isGrounded)
         {
-            stateMachine.ChangeState(player.fallState);
+            State s = player.TetherIsMaxLength() ? player.swingState : player.fallState;
+            stateMachine.ChangeState(s);
+            return;
         }
 
 

@@ -1,27 +1,33 @@
+using System;
 using UnityEngine;
 
 public class FallState : State
 {
     // ReSharper disable Unity.PerformanceAnalysis
-    private float gravityValue;
-    private float gravityMultiplier;
-    private float fallGravityAddition = 1.0f;
+    private float _gravityValue;
+    private float _gravityMultiplier;
+    private const float FallGravityAddition = 1.0f;
     
     public override void Enter()
     {
         base.Enter();
-        gravityValue = player.gravityValue;
-        gravityMultiplier = player.gravityMultiplier;
+        _gravityValue = player.gravityValue;
+        _gravityMultiplier = player.gravityMultiplier;
 
     }
 
     public override void StateUpdate()
     {
         base.StateUpdate();
-        
-        if (isGrounded && player.yVelocity <= 0)
+
+        if (player.TetherIsMaxLength())
         {
-            player.yVelocity = groundingForce;
+            stateMachine.ChangeState(player.swingState);
+        }
+        
+        if (isGrounded && player.velocity.y <= 0)
+        {
+            player.velocity.y = groundingForce;
             if (moveInput.magnitude > 0)
             {
                 stateMachine.ChangeState(player.moveState);
@@ -34,24 +40,32 @@ public class FallState : State
         }
 
         // Vertical Calculations
-        if (player.yVelocity < 0) // If player is going towards ground
+        if (player.velocity.y < 0) // If player is going towards ground
         {
-            player.yVelocity += gravityValue * (gravityMultiplier + fallGravityAddition) * Time.deltaTime;
+            player.velocity.y += _gravityValue * (_gravityMultiplier + FallGravityAddition) * Time.deltaTime;
         }
         else // If player is jumping or going upwards
         {
-            player.yVelocity += gravityValue * gravityMultiplier * Time.deltaTime;
+            player.velocity.y += _gravityValue * _gravityMultiplier * Time.deltaTime;
         }
-        player.yVelocity = Mathf.Max(player.yVelocity, player.maxFallSpeed);
+        player.velocity.y = Mathf.Max(player.velocity.y, player.maxFallSpeed);
         
         // Horizontal Movement
-        Transform transform = player.transform;
-        Vector3 horizontal = (transform.right * moveInput.x + transform.forward * moveInput.y) * (player.playerSpeed * player.airControl);
+        Transform playerTransform = player.transform;
+        Vector3 horizontal = (playerTransform.right * moveInput.x + playerTransform.forward * moveInput.y) * (player.playerSpeed * player.airControl);
+
+        if (horizontal.x != 0f && Math.Sign(player.velocity.x) != Math.Sign(horizontal.x))
+        {
+            player.velocity.x = player.velocity.x *= (1 - Time.deltaTime);
+        }
+
+        if (horizontal.z != 0f && Math.Sign(player.velocity.z) != Math.Sign(horizontal.z))
+        {
+            player.velocity.z = player.velocity.z *= (1 - Time.deltaTime);
+        }
         
         // Updating player position
-        Vector3 velocity = horizontal;
-        velocity.y = player.yVelocity;
-        player.controller.Move(velocity * Time.deltaTime);
+        player.controller.Move((player.velocity + horizontal) * Time.deltaTime);
     }
 
 }
