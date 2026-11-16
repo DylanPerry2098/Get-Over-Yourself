@@ -11,6 +11,7 @@ public class InputHandler : MonoBehaviour
     public InputActionReference grappleActionRef;
     public InputActionReference retractActionRef;
     public InputActionReference extendActionRef;
+    public InputActionReference slowmoActionRef;
     
     public Vector3 GetMovement()
     {
@@ -47,4 +48,10 @@ public class InputHandler : MonoBehaviour
     {
         return extendActionRef.action.inProgress;
     }
+
+    public bool WantsToSlowmo()
+    {
+        return slowmoActionRef.action.inProgress;
+    }
+    
 }

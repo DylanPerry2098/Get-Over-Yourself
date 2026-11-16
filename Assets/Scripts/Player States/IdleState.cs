@@ -18,16 +18,19 @@ public class IdleState : State
         if (inputHandler.WantsToJump() && isGrounded)
         {
             stateMachine.ChangeState(player.jumpState);
+            return;
         }
 
         if (!isGrounded)
         {
             stateMachine.ChangeState(player.fallState);
+            return;
         }
 
         if (inputHandler.GetMovement().magnitude > 0)
         {
             stateMachine.ChangeState(player.moveState);
+            return;
         }
         
         // Keeps player grounded with downwards force

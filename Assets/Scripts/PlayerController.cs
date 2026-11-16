@@ -7,8 +7,6 @@ using UnityEngine.Serialization;
 
 // TODO: resolve all JetBrains warnings
 // TODO: comment code and make terminology consistent
-// TODO: optional slowmo (hold RMB) for easier aiming
-// TODO: disable mouse
 
 public class PlayerController : MonoBehaviour
 {
@@ -25,11 +23,16 @@ public class PlayerController : MonoBehaviour
     [Header("Grapple")]
     private Ray _tetherRaycast;
     private LineRenderer _lineRenderer;
+    private Material _lineMaterial;
     
     private const float TetherMinLength = 1f;
     private const float TetherMaxLength = 10f;
     private const float TetherRetractExtendSpeed = 10f;
     private const float TetherShootPauseSeconds = 0.1f;
+
+    private Color MaxTensionColor = Color.saddleBrown;
+    private Color SlackColor = Color.softYellow;
+    private const float TetherLengthToFullSlack = 2.5f;
     
     private float _tetherCurrentLength;
     private float _distanceToGrapplePoint;
@@ -58,7 +61,6 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public float gravityValue = -9.8f;
     [HideInInspector] public Vector3 direction;
 
-    // TODO: seperate internal and external velocity so the player can jump out of swing and air move without canceling momentum.
     public Vector3 velocity;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -67,6 +69,8 @@ public class PlayerController : MonoBehaviour
         _tetherCurrentLength = TetherMaxLength;
         camera = GetComponentInChildren<Camera>();
         _lineRenderer = GetComponent<LineRenderer>();
+        _lineMaterial = _lineRenderer.material;
+        _lineMaterial.color = Color.aquamarine;
         _lineRenderer.enabled = false;
     
         _tetherRaycast = new Ray(transform.position, camera.transform.forward);
@@ -79,11 +83,17 @@ public class PlayerController : MonoBehaviour
     {
         if (_lineRenderer.enabled)
         {
+            UpdateLineColor();
             _lineRenderer.SetPosition(0, transform.position);
             if (_tetherExtending)
             {
                 ExtendTether();
             }
+        }
+
+        if (Time.timeScale != 0f)
+        {
+            Time.timeScale = inputHandler.WantsToSlowmo() ? 0.2f : 1.0f;
         }
 
         if (inputHandler.WantsToGrapple())
@@ -100,6 +110,12 @@ public class PlayerController : MonoBehaviour
         }
 
         LeashSelf();
+    }
+
+    void UpdateLineColor()
+    {
+        Color lerpedColor = Color.Lerp(MaxTensionColor, SlackColor, (_tetherCurrentLength - _distanceToGrapplePoint)/TetherLengthToFullSlack);
+        _lineMaterial.color = lerpedColor;
     }
 
     public void TryGrapple()

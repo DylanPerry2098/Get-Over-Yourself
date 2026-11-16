@@ -125,6 +125,16 @@
                     "interactions": "",
                     "initialStateCheck": false,
                     "priority": 0
+                },
+                {
+                    "name": "Slowmo",
+                    "type": "Button",
+                    "id": "c277526d-191c-4d2a-a268-a7764998186e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
                 }
             ],
             "bindings": [
@@ -543,6 +553,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Extend",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1e6e636f-1303-41ca-9b23-7e7377135b8d",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Slowmo",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

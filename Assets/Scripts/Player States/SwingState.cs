@@ -20,6 +20,7 @@ public class SwingState : State
         if (isGrounded)
         {
             stateMachine.ChangeState(player.idleState);
+            return;
         }
 
         if (inputHandler.WantsToJump())
@@ -28,11 +29,13 @@ public class SwingState : State
             player.TryGrapple();
             
             stateMachine.ChangeState(s);
+            return;
         }
         
         if (!player.IsTethered())
         {
             stateMachine.ChangeState(player.fallState);
+            return;
         }
         
         

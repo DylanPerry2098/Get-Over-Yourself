@@ -18,17 +18,20 @@ public class MoveState : State
         if (moveInput.magnitude <= 0)
         {
             stateMachine.ChangeState(player.idleState);
+            return;
         }
 
         if (inputHandler.WantsToJump() && isGrounded)
         {
             stateMachine.ChangeState(player.jumpState);
+            return;
         }
 
         if (!isGrounded)
         {
             State s = player.TetherIsMaxLength() ? player.swingState : player.fallState;
-            stateMachine.ChangeState(player.fallState);
+            stateMachine.ChangeState(s);
+            return;
         }
 
 
