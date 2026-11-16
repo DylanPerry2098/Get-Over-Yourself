@@ -4,15 +4,15 @@ using UnityEngine;
 public class FallState : State
 {
     // ReSharper disable Unity.PerformanceAnalysis
-    private float gravityValue;
-    private float gravityMultiplier;
-    private float fallGravityAddition = 1.0f;
+    private float _gravityValue;
+    private float _gravityMultiplier;
+    private const float FallGravityAddition = 1.0f;
     
     public override void Enter()
     {
         base.Enter();
-        gravityValue = player.gravityValue;
-        gravityMultiplier = player.gravityMultiplier;
+        _gravityValue = player.gravityValue;
+        _gravityMultiplier = player.gravityMultiplier;
 
     }
 
@@ -42,11 +42,11 @@ public class FallState : State
         // Vertical Calculations
         if (player.velocity.y < 0) // If player is going towards ground
         {
-            player.velocity.y += gravityValue * (gravityMultiplier + fallGravityAddition) * Time.deltaTime;
+            player.velocity.y += _gravityValue * (_gravityMultiplier + FallGravityAddition) * Time.deltaTime;
         }
         else // If player is jumping or going upwards
         {
-            player.velocity.y += gravityValue * gravityMultiplier * Time.deltaTime;
+            player.velocity.y += _gravityValue * _gravityMultiplier * Time.deltaTime;
         }
         player.velocity.y = Mathf.Max(player.velocity.y, player.maxFallSpeed);
         

@@ -3,7 +3,6 @@ using UnityEngine.InputSystem;
 
 public class MoveState : State
 {
-    private Transform playerTransform;
     public override void Enter()
     {
         base.Enter();

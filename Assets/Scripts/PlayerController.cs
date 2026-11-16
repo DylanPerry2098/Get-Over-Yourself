@@ -1,9 +1,5 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 // TODO: resolve all JetBrains warnings
 // TODO: comment code and make terminology consistent
@@ -26,18 +22,18 @@ public class PlayerController : MonoBehaviour
     private Material _lineMaterial;
     
     private const float TetherMinLength = 1f;
-    private const float TetherMaxLength = 10f;
+    private const float TetherMaxLength = 15f;
     private const float TetherRetractExtendSpeed = 10f;
     private const float TetherShootPauseSeconds = 0.1f;
 
-    private Color MaxTensionColor = Color.saddleBrown;
-    private Color SlackColor = Color.softYellow;
+    private readonly Color _maxTensionColor = Color.saddleBrown;
+    private readonly Color _slackColor = Color.softYellow;
     private const float TetherLengthToFullSlack = 2.5f;
     
     private float _tetherCurrentLength;
     private float _distanceToGrapplePoint;
     private Vector3 _grapplePoint;
-    private bool _tetherExtending = false;
+    private bool _tetherExtending;
 
     [Header("Smoothing")]
     // [Range(0, 1)] 
@@ -49,7 +45,7 @@ public class PlayerController : MonoBehaviour
     [Range(0, 1)]
     public float airControl = 0.75f;
 
-    [Header("State Machine")] public StateMachine movementSM;
+    [Header("State Machine")] public StateMachine movementSm;
 
     public IdleState idleState;
     public MoveState moveState;
@@ -70,17 +66,17 @@ public class PlayerController : MonoBehaviour
         camera = GetComponentInChildren<Camera>();
         _lineRenderer = GetComponent<LineRenderer>();
         _lineMaterial = _lineRenderer.material;
-        _lineMaterial.color = Color.aquamarine;
         _lineRenderer.enabled = false;
     
         _tetherRaycast = new Ray(transform.position, camera.transform.forward);
         
         velocity.y = -2.0f;
-        movementSM.Initialize(idleState);
+        movementSm.Initialize(idleState);
     }
 
     private void Update()
     {
+        // Update line render visuals
         if (_lineRenderer.enabled)
         {
             UpdateLineColor();
@@ -91,14 +87,16 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        // Handle slowmo
         if (Time.timeScale != 0f)
         {
             Time.timeScale = inputHandler.WantsToSlowmo() ? 0.2f : 1.0f;
         }
-
+        
+        // Grapple controls
         if (inputHandler.WantsToGrapple())
         {
-            TryGrapple();
+            ToggleGrapple();
         }
 
         if (inputHandler.WantsToRetract())
@@ -114,11 +112,10 @@ public class PlayerController : MonoBehaviour
 
     void UpdateLineColor()
     {
-        Color lerpedColor = Color.Lerp(MaxTensionColor, SlackColor, (_tetherCurrentLength - _distanceToGrapplePoint)/TetherLengthToFullSlack);
-        _lineMaterial.color = lerpedColor;
+        _lineMaterial.color = Color.Lerp(_maxTensionColor, _slackColor, (_tetherCurrentLength - _distanceToGrapplePoint)/TetherLengthToFullSlack);
     }
 
-    public void TryGrapple()
+    public void ToggleGrapple()
     {
         if (_lineRenderer.enabled)
         {
@@ -129,30 +126,31 @@ public class PlayerController : MonoBehaviour
         }
         _tetherRaycast.origin = transform.position;
         _tetherRaycast.direction = camera.transform.forward;
-        Debug.DrawRay(transform.position, _tetherRaycast.direction * TetherMaxLength, Color.red);
+        // Debug.DrawRay(transform.position, _tetherRaycast.direction * TetherMaxLength, Color.red);
         if (Physics.Raycast(_tetherRaycast, out RaycastHit hit, TetherMaxLength, 1))
         {
             _grapplePoint = hit.point;
             _lineRenderer.enabled = true;
+            _tetherExtending = true;
             _lineRenderer.SetPosition(0, transform.position);
             _lineRenderer.SetPosition(1, transform.position);
             _tetherCurrentLength = (_grapplePoint - transform.position).magnitude;
-            _tetherExtending = true;
             if (Time.timeScale == 0f)
             {
                 return;
             }
             Time.timeScale = 0f;
             StartCoroutine(PauseGame(TetherShootPauseSeconds));
-            
-
         }
     }
 
-    public void ExtendTether()
+    /**
+     * Extends the line renderer until it reaches the grapple point. 
+     */
+    private void ExtendTether()
     {
         _lineRenderer.SetPosition(1, 
-            Vector3.Lerp(_lineRenderer.GetPosition(1), _grapplePoint, .05f)
+            Vector3.Lerp(_lineRenderer.GetPosition(1), _grapplePoint, Time.unscaledDeltaTime * 10f)
             );
         if ((_lineRenderer.GetPosition(1) - _grapplePoint).magnitude < 0.5)
         {
@@ -161,7 +159,7 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    IEnumerator PauseGame(float seconds)
+    private static IEnumerator PauseGame(float seconds)
     {
         yield return new WaitForSecondsRealtime(seconds);
         Time.timeScale = 1f;

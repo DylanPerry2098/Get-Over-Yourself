@@ -7,7 +7,7 @@ public class CameraController : MonoBehaviour
     public InputHandler inputHandler;
     public float mouseSensitivity = 0.5f;
     
-    private float cameraVerticalRotation = 0.0f;
+    private float _cameraVerticalRotation = 0.0f;
     
     // Update is called once per frame
     void Update()
@@ -19,9 +19,9 @@ public class CameraController : MonoBehaviour
         float inputY = mouseDirection.y * mouseSensitivity;
         
         // Rotate Camera around Local X Axis
-        cameraVerticalRotation -= inputY;
-        cameraVerticalRotation = Mathf.Clamp(cameraVerticalRotation, -90, 90);
-        transform.localEulerAngles = Vector3.right * cameraVerticalRotation; 
+        _cameraVerticalRotation -= inputY;
+        _cameraVerticalRotation = Mathf.Clamp(_cameraVerticalRotation, -90, 90);
+        transform.localEulerAngles = Vector3.right * _cameraVerticalRotation; 
         
         // Rotate Camera and Player around Local Y Axis
         
