@@ -381,21 +381,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   controller: {fileID: 2550744519701674488}
   animator: {fileID: 0}
+  camera: {fileID: 416902554696119446}
+  inputHandler: {fileID: 1533250107527285318}
   playerSpeed: 5
   jumpHeight: 10
   gravityMultiplier: 3
   maxFallSpeed: -25
   airControl: 0.75
-  movementSM: {fileID: 132475878904996598}
+  movementSm: {fileID: 132475878904996598}
   idleState: {fileID: 832476793154394742}
   moveState: {fileID: 2840619467622222162}
   jumpState: {fileID: 7074372751722460240}
   fallState: {fileID: 5325970830996832520}
   interactState: {fileID: 4886311418646384490}
-  grappleState: {fileID: 4159286291831873419}
+  swingState: {fileID: 0}
   gravityValue: -9.8
   direction: {x: 0, y: 0, z: 0}
-  yVelocity: 0
+  velocity: {x: 0, y: 0, z: 0}
 --- !u!114 &1533250107527285318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,6 +415,9 @@ MonoBehaviour:
   jumpActionRef: {fileID: -2099379676528639254, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   interactActionRef: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   grappleActionRef: {fileID: 8875874648457574744, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  retractActionRef: {fileID: 0}
+  extendActionRef: {fileID: 0}
+  slowmoActionRef: {fileID: 0}
 --- !u!114 &132475878904996598
 MonoBehaviour:
   m_ObjectHideFlags: 0
