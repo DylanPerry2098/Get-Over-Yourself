@@ -5,7 +5,7 @@ public class JumpState : State
     public override void Enter()
     {
         base.Enter();
-        player.yVelocity = player.jumpHeight;
+        player.velocity.y += player.jumpHeight;
         stateMachine.ChangeState(player.fallState);
 
     }

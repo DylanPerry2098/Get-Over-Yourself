@@ -6,6 +6,7 @@ public class IdleState : State
     public override void Enter()
     {
         base.Enter();
+        player.velocity = Vector3.zero;
         player.direction = Vector3.zero;
     }
 
@@ -17,21 +18,19 @@ public class IdleState : State
         if (inputHandler.WantsToJump() && isGrounded)
         {
             stateMachine.ChangeState(player.jumpState);
+            return;
         }
 
         if (!isGrounded)
         {
             stateMachine.ChangeState(player.fallState);
-        }
-        
-        if (inputHandler.WantsToGrapple())
-        {
-            stateMachine.ChangeState(player.grappleState);
+            return;
         }
 
         if (inputHandler.GetMovement().magnitude > 0)
         {
             stateMachine.ChangeState(player.moveState);
+            return;
         }
         
         // Keeps player grounded with downwards force
