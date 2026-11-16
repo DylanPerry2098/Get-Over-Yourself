@@ -1027,7 +1027,7 @@ MonoBehaviour:
   gravityMultiplier: 3
   maxFallSpeed: -15
   airControl: 0.75
-  movementSM: {fileID: 753697635}
+  movementSm: {fileID: 753697635}
   idleState: {fileID: 753697634}
   moveState: {fileID: 753697633}
   jumpState: {fileID: 753697632}
