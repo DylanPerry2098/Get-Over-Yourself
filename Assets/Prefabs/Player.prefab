@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 7516850295995624770}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -334,8 +334,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::IdleState
   stateMachine: {fileID: 5593913104507148571}
-  player: {fileID: 8940058809058384306}
-  inputHandler: {fileID: 3967896689750559874}
 --- !u!114 &6832285089910929431
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -349,8 +347,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MoveState
   stateMachine: {fileID: 5593913104507148571}
-  player: {fileID: 8940058809058384306}
-  inputHandler: {fileID: 3967896689750559874}
 --- !u!114 &2585123082170086747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -364,8 +360,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpState
   stateMachine: {fileID: 5593913104507148571}
-  player: {fileID: 8940058809058384306}
-  inputHandler: {fileID: 3967896689750559874}
 --- !u!114 &8275161450497498931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -379,8 +373,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteractState
   stateMachine: {fileID: 5593913104507148571}
-  player: {fileID: 8940058809058384306}
-  inputHandler: {fileID: 3967896689750559874}
 --- !u!114 &8734575596104340394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -394,8 +386,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GrappleState
   stateMachine: {fileID: 5593913104507148571}
-  player: {fileID: 8940058809058384306}
-  inputHandler: {fileID: 3967896689750559874}
 --- !u!114 &6754285430695282451
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -409,8 +399,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FallState
   stateMachine: {fileID: 5593913104507148571}
-  player: {fileID: 8940058809058384306}
-  inputHandler: {fileID: 3967896689750559874}
 --- !u!120 &167842156516892014
 LineRenderer:
   serializedVersion: 3
