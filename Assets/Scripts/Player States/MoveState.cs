@@ -3,38 +3,43 @@ using UnityEngine.InputSystem;
 
 public class MoveState : State
 {
-
-    public MoveState(PlayerController player, StateMachine _stateMachine): base(player, _stateMachine)
+    public override void Enter()
     {
-        base.player = player;
-        stateMachine = _stateMachine;
-
-        // There may be a better way of doing this
-
+        base.Enter();
+        player.velocity = Vector3.zero;
+        
     }
     
-    public virtual void Enter()
+    public override void StateUpdate()
     {
-        Debug.Log("enter state: " + ToString());
-    }
-
-    public void HandleInput()
-    {
+        base.StateUpdate();
         
-    }
+        if (moveInput.magnitude <= 0)
+        {
+            stateMachine.ChangeState(player.idleState);
+            return;
+        }
 
-    public void StateUpdate()
-    {
-        
-    }
+        if (inputHandler.WantsToJump() && isGrounded)
+        {
+            stateMachine.ChangeState(player.jumpState);
+            return;
+        }
 
-    public void StateFixedUpdate()
-    {
-        
-    }
+        if (!isGrounded)
+        {
+            State s = player.TetherIsMaxLength() ? player.swingState : player.fallState;
+            stateMachine.ChangeState(s);
+            return;
+        }
 
-    public void Exit()
-    {
-        
+
+        Transform transform = player.transform;
+        Vector3 horizontal = (transform.right * moveInput.x + transform.forward * moveInput.y) * player.playerSpeed;
+        player.direction = horizontal;
+
+        Vector3 velocity = horizontal;
+        velocity.y = groundingForce;
+        player.controller.Move(velocity * Time.deltaTime);
     }
 }

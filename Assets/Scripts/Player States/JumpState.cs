@@ -2,9 +2,11 @@ using UnityEngine;
 
 public class JumpState : State
 {
-    public JumpState(PlayerController _player, StateMachine _stateMachine) : base(_player, _stateMachine)
+    public override void Enter()
     {
-        player = _player;
-        stateMachine = _stateMachine;
+        base.Enter();
+        player.velocity.y += player.jumpHeight;
+        stateMachine.ChangeState(player.fallState);
+
     }
 }
