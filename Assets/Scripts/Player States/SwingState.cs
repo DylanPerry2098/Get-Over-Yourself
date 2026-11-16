@@ -2,10 +2,6 @@ using UnityEngine;
 
 public class SwingState : State
 
-// TODO: If rope is fully taut but still on ground, avoid switching to swing.
-// TODO: add some control while swinging 
-// TODO: don't allow for infinite jump chaining. 
-
 {
     private float gravityValue;
     private float gravityMultiplier;
@@ -20,7 +16,7 @@ public class SwingState : State
 
     public override void StateUpdate()
     {
-        isGrounded = player.controller.isGrounded;
+        base.StateUpdate();
         if (isGrounded)
         {
             stateMachine.ChangeState(player.idleState);
@@ -28,8 +24,10 @@ public class SwingState : State
 
         if (inputHandler.WantsToJump())
         {
+            State s = player.GetGrapplePoint().y > player.transform.position.y ? player.jumpState : player.fallState;
             player.TryGrapple();
-            stateMachine.ChangeState(player.jumpState);
+            
+            stateMachine.ChangeState(s);
         }
         
         if (!player.IsTethered())
@@ -42,6 +40,11 @@ public class SwingState : State
         
         player.velocity.y += gravityValue * (gravityMultiplier + fallGravityAddition) * Time.deltaTime;
         player.velocity.y = Mathf.Max(player.velocity.y, player.maxFallSpeed);
+        
+        Transform playerTransform = player.transform;
+        Vector3 horizontal = (playerTransform.right * moveInput.x + playerTransform.forward * moveInput.y) * (player.playerSpeed * player.airControl);
+
+        player.velocity += (horizontal * Time.deltaTime);
 
         if (player.TetherIsMaxLength())
         {

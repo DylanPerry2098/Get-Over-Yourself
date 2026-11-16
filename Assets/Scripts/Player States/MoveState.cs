@@ -7,6 +7,7 @@ public class MoveState : State
     public override void Enter()
     {
         base.Enter();
+        player.velocity = Vector3.zero;
         
     }
     

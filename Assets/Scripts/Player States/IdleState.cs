@@ -6,6 +6,7 @@ public class IdleState : State
     public override void Enter()
     {
         base.Enter();
+        player.velocity = Vector3.zero;
         player.direction = Vector3.zero;
     }
 

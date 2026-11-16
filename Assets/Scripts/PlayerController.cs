@@ -1,14 +1,14 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
 // TODO: resolve all JetBrains warnings
 // TODO: comment code and make terminology consistent
-// TODO: add enter pause
-// TODO: make rope shoot animation
-// TODO: add crosshair
 // TODO: optional slowmo (hold RMB) for easier aiming
+// TODO: disable mouse
 
 public class PlayerController : MonoBehaviour
 {
@@ -29,10 +29,12 @@ public class PlayerController : MonoBehaviour
     private const float TetherMinLength = 1f;
     private const float TetherMaxLength = 10f;
     private const float TetherRetractExtendSpeed = 10f;
+    private const float TetherShootPauseSeconds = 0.1f;
     
     private float _tetherCurrentLength;
     private float _distanceToGrapplePoint;
     private Vector3 _grapplePoint;
+    private bool _tetherExtending = false;
 
     [Header("Smoothing")]
     // [Range(0, 1)] 
@@ -78,6 +80,10 @@ public class PlayerController : MonoBehaviour
         if (_lineRenderer.enabled)
         {
             _lineRenderer.SetPosition(0, transform.position);
+            if (_tetherExtending)
+            {
+                ExtendTether();
+            }
         }
 
         if (inputHandler.WantsToGrapple())
@@ -102,6 +108,7 @@ public class PlayerController : MonoBehaviour
         {
             _grapplePoint = Vector3.zero;
             _lineRenderer.enabled = false;
+            _tetherExtending = false;
             return;
         }
         _tetherRaycast.origin = transform.position;
@@ -112,12 +119,38 @@ public class PlayerController : MonoBehaviour
             _grapplePoint = hit.point;
             _lineRenderer.enabled = true;
             _lineRenderer.SetPosition(0, transform.position);
-            _lineRenderer.SetPosition(1, _grapplePoint);
+            _lineRenderer.SetPosition(1, transform.position);
             _tetherCurrentLength = (_grapplePoint - transform.position).magnitude;
+            _tetherExtending = true;
+            if (Time.timeScale == 0f)
+            {
+                return;
+            }
+            Time.timeScale = 0f;
+            StartCoroutine(PauseGame(TetherShootPauseSeconds));
+            
 
         }
     }
-    
+
+    public void ExtendTether()
+    {
+        _lineRenderer.SetPosition(1, 
+            Vector3.Lerp(_lineRenderer.GetPosition(1), _grapplePoint, .05f)
+            );
+        if ((_lineRenderer.GetPosition(1) - _grapplePoint).magnitude < 0.5)
+        {
+            _tetherExtending = false;
+        }
+    }
+
+
+    IEnumerator PauseGame(float seconds)
+    {
+        yield return new WaitForSecondsRealtime(seconds);
+        Time.timeScale = 1f;
+    }
+     
     /**
      * Limits the player's position based on the current length of their tether, if enabled.
      */
@@ -167,5 +200,10 @@ public class PlayerController : MonoBehaviour
     public bool TetherIsMaxLength()
     {
         return _lineRenderer.enabled && _distanceToGrapplePoint >= _tetherCurrentLength;
+    }
+
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        Cursor.lockState = hasFocus ? CursorLockMode.Locked : CursorLockMode.None;
     }
 }

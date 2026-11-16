@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class FallState : State
@@ -52,11 +53,19 @@ public class FallState : State
         // Horizontal Movement
         Transform playerTransform = player.transform;
         Vector3 horizontal = (playerTransform.right * moveInput.x + playerTransform.forward * moveInput.y) * (player.playerSpeed * player.airControl);
+
+        if (horizontal.x != 0f && Math.Sign(player.velocity.x) != Math.Sign(horizontal.x))
+        {
+            player.velocity.x = player.velocity.x *= (1 - Time.deltaTime);
+        }
+
+        if (horizontal.z != 0f && Math.Sign(player.velocity.z) != Math.Sign(horizontal.z))
+        {
+            player.velocity.z = player.velocity.z *= (1 - Time.deltaTime);
+        }
         
         // Updating player position
-        player.velocity.x = horizontal.x;
-        player.velocity.z = horizontal.z;
-        player.controller.Move(player.velocity * Time.deltaTime);
+        player.controller.Move((player.velocity + horizontal) * Time.deltaTime);
     }
 
 }
