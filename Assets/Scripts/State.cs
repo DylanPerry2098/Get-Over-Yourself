@@ -3,8 +3,9 @@ using UnityEngine.InputSystem;
 
 public class State: MonoBehaviour
 {
-    public PlayerController player;
+    
     public StateMachine stateMachine;
+    public PlayerController player;
     public InputHandler inputHandler;
     
     protected Vector2 moveInput;
