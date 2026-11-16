@@ -5,7 +5,7 @@ public class CameraController : MonoBehaviour
     public Transform playerTransform;
     public Camera mainCamera;
     public InputHandler inputHandler;
-    public float mouseSensitivity = 1.0f;
+    public float mouseSensitivity = 0.5f;
     
     private float cameraVerticalRotation = 0.0f;
     
@@ -13,9 +13,11 @@ public class CameraController : MonoBehaviour
     void Update()
     {
         // Get Mouse Input
-        float inputX = inputHandler.GetMouseDirection().x * mouseSensitivity;
-        float inputY = inputHandler.GetMouseDirection().y * mouseSensitivity;
+        Vector2 mouseDirection = inputHandler.GetMouseDirection();
 
+        float inputX = mouseDirection.x * mouseSensitivity;
+        float inputY = mouseDirection.y * mouseSensitivity;
+        
         // Rotate Camera around Local X Axis
         cameraVerticalRotation -= inputY;
         cameraVerticalRotation = Mathf.Clamp(cameraVerticalRotation, -90, 90);

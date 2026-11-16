@@ -23,11 +23,6 @@ public class IdleState : State
         {
             stateMachine.ChangeState(player.fallState);
         }
-        
-        if (inputHandler.WantsToGrapple())
-        {
-            stateMachine.ChangeState(player.grappleState);
-        }
 
         if (inputHandler.GetMovement().magnitude > 0)
         {

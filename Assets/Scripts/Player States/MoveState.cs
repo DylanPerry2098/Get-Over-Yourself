@@ -26,6 +26,7 @@ public class MoveState : State
 
         if (!isGrounded)
         {
+            State s = player.TetherIsMaxLength() ? player.swingState : player.fallState;
             stateMachine.ChangeState(player.fallState);
         }
 
