@@ -4,6 +4,8 @@ using UnityEngine;
 public class StateMachine: MonoBehaviour
 {
     [HideInInspector] public State currentState;
+    public PlayerController player;
+    public InputHandler inputHandler;
 
     public void Initialize(State startingState)
     {
