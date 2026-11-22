@@ -127,8 +127,12 @@ public class PlayerController : MonoBehaviour
         _tetherRaycast.origin = transform.position;
         _tetherRaycast.direction = camera.transform.forward;
         // Debug.DrawRay(transform.position, _tetherRaycast.direction * TetherMaxLength, Color.red);
-        if (Physics.Raycast(_tetherRaycast, out RaycastHit hit, TetherMaxLength, 1))
+        if (Physics.Raycast(_tetherRaycast, out RaycastHit hit, TetherMaxLength, 1  | 1 << 6))
         {
+            if (hit.collider.gameObject.layer != 6)
+            {
+                return;
+            }
             _grapplePoint = hit.point;
             _lineRenderer.enabled = true;
             _tetherExtending = true;

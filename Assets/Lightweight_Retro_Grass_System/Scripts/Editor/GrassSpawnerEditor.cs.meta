@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 29afbacdf29dea644b2b65392427cd10
+AssetOrigin:
+  serializedVersion: 1
+  productId: 410330
+  packageName: Lightweight Retro Grass Generation
+  packageVersion: 1.0.0
+  assetPath: Assets/Lightweight_Retro_Grass_System/Scripts/Editor/GrassSpawnerEditor.cs
+  uploadId: 1003070

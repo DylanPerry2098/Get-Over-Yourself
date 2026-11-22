@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 6feee3d2ff750404780e345a8070a7f5
+AssetOrigin:
+  serializedVersion: 1
+  productId: 410330
+  packageName: Lightweight Retro Grass Generation
+  packageVersion: 1.0.0
+  assetPath: Assets/Lightweight_Retro_Grass_System/Scripts/Samplers/TerrainSampler.cs
+  uploadId: 1003070

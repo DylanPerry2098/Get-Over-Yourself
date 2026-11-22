@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: b10ad2a125ea5944b953e6c1bd12ba12
+AssetOrigin:
+  serializedVersion: 1
+  productId: 410330
+  packageName: Lightweight Retro Grass Generation
+  packageVersion: 1.0.0
+  assetPath: Assets/Lightweight_Retro_Grass_System/Scripts/Base/GrassMeshGenerator.cs
+  uploadId: 1003070

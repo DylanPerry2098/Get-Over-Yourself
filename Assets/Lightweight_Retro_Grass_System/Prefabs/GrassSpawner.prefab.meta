@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 9476460964dee9f4faeb220227c0b4db
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 410330
+  packageName: Lightweight Retro Grass Generation
+  packageVersion: 1.0.0
+  assetPath: Assets/Lightweight_Retro_Grass_System/Prefabs/GrassSpawner.prefab
+  uploadId: 1003070
