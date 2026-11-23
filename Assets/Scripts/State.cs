@@ -14,7 +14,7 @@ public class State: MonoBehaviour
     
     public virtual void Enter()
     {
-        Debug.Log("enter state: " + ToString());
+        // Debug.Log("enter state: " + ToString());
     }
 
     public virtual void StateUpdate()
