@@ -20,10 +20,21 @@ public class SurfaceAudioLibrary : ScriptableObject
         Snow,
         Mud,
     }
-
     [SerializeField] public Dictionary<SurfaceType, AudioClip[]> SoundsBySurface = new Dictionary<SurfaceType, AudioClip[]>();
 
     [SerializeField] public Dictionary<SurfaceType, string> FilePathBySurface = new Dictionary<SurfaceType, string>();
-    
-    
+
+    public static SurfaceType TerrainNameToSurfaceType(string name)
+    {
+        switch (name)
+        {
+            case "TL_Clay": return SurfaceType.Dirt;
+            case "TL_Grass": return SurfaceType.Grass;
+            case "TL_Stone": return SurfaceType.Stone;
+            case "TL_Snow": case "TL_DarkSnow": return SurfaceType.Snow;
+            case "TL_Swamp": return SurfaceType.Mud;
+        }
+
+        return SurfaceType.Grass;
+    }
 }
