@@ -26,6 +26,8 @@ public class PlayerController : MonoBehaviour
     private const float TetherRetractExtendSpeed = 10f;
     private const float TetherShootPauseSeconds = 0.1f;
 
+    private const float AimAssistRadius = 8f;
+
     private readonly Color _maxTensionColor = Color.saddleBrown;
     private readonly Color _slackColor = Color.softYellow;
     private const float TetherLengthToFullSlack = 2.5f;
@@ -131,9 +133,18 @@ public class PlayerController : MonoBehaviour
         {
             if (hit.collider.gameObject.layer != 6)
             {
-                return;
+                Collider[] nearbyCrystals = Physics.OverlapSphere(gameObject.transform.position + _tetherRaycast.direction, AimAssistRadius, 1 << 6);
+                if (nearbyCrystals.Length == 0)
+                {
+                    return;
+                }
+
+                _grapplePoint = nearbyCrystals[0].gameObject.transform.position;
             }
-            _grapplePoint = hit.point;
+            else
+            {
+                _grapplePoint = hit.point;
+            }
             _lineRenderer.enabled = true;
             _tetherExtending = true;
             _lineRenderer.SetPosition(0, transform.position);
