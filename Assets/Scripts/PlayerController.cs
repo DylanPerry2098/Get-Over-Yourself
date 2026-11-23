@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     public Animator animator;
     public Camera camera;
     public InputHandler inputHandler;
+    
+    private SurfaceSampler _SurfaceSampler;
 
     [Header("Controls")] public float playerSpeed = 5.0f;
     public float jumpHeight = 10f;
@@ -21,6 +23,7 @@ public class PlayerController : MonoBehaviour
     private Ray _tetherRaycast;
     private LineRenderer _lineRenderer;
     private Material _lineMaterial;
+    [SerializeField] private RandomAudioClip _crystalChimeRandomClip;
     
     private const float TetherMinLength = 1f;
     private const float TetherMaxLength = 15f;
@@ -70,6 +73,8 @@ public class PlayerController : MonoBehaviour
         _lineRenderer = GetComponent<LineRenderer>();
         _lineMaterial = _lineRenderer.material;
         _lineRenderer.enabled = false;
+
+        _SurfaceSampler = GetComponent<SurfaceSampler>();
     
         _tetherRaycast = new Ray(transform.position, camera.transform.forward);
         
@@ -111,6 +116,8 @@ public class PlayerController : MonoBehaviour
         }
 
         LeashSelf();
+
+        print(_SurfaceSampler.GetSurfaceTypeFromTerrain(gameObject.transform.position, Terrain.activeTerrain));
     }
 
     void UpdateLineColor()
@@ -135,7 +142,7 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-        
+        AudioSource.PlayClipAtPoint(_crystalChimeRandomClip.GetClip(), _grapplePoint);
         _lineRenderer.enabled = true;
         _tetherExtending = true;
         _lineRenderer.SetPosition(0, transform.position);
