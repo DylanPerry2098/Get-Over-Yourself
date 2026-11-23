@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     private Ray _tetherRaycast;
     private LineRenderer _lineRenderer;
     private Material _lineMaterial;
+    [SerializeField] private RandomAudioClip _crystalChimeRandomClip;
     
     private const float TetherMinLength = 1f;
     private const float TetherMaxLength = 15f;
@@ -135,7 +136,7 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-        
+        AudioSource.PlayClipAtPoint(_crystalChimeRandomClip.GetClip(), _grapplePoint);
         _lineRenderer.enabled = true;
         _tetherExtending = true;
         _lineRenderer.SetPosition(0, transform.position);
