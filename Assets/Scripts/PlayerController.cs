@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -121,7 +122,7 @@ public class PlayerController : MonoBehaviour
     {
         if (_lineRenderer.enabled)
         {
-            _grapplePoint = Vector3.zero;
+            _grapplePoint = Vector3.negativeInfinity;
             _lineRenderer.enabled = false;
             _tetherExtending = false;
             return;
@@ -129,38 +130,103 @@ public class PlayerController : MonoBehaviour
         _tetherRaycast.origin = transform.position;
         _tetherRaycast.direction = camera.transform.forward;
         // Debug.DrawRay(transform.position, _tetherRaycast.direction * TetherMaxLength, Color.red);
-        if (Physics.Raycast(_tetherRaycast, out RaycastHit hit, TetherMaxLength, 1  | 1 << 6))
-        {
-            if (hit.collider.gameObject.layer != 6)
-            {
-                Collider[] nearbyCrystals = Physics.OverlapSphere(gameObject.transform.position + _tetherRaycast.direction, AimAssistRadius, 1 << 6);
-                if (nearbyCrystals.Length == 0)
-                {
-                    return;
-                }
 
-                _grapplePoint = nearbyCrystals[0].gameObject.transform.position;
-            }
-            else
-            {
-                _grapplePoint = hit.point;
-            }
-            _lineRenderer.enabled = true;
-            _tetherExtending = true;
-            _lineRenderer.SetPosition(0, transform.position);
-            _lineRenderer.SetPosition(1, transform.position);
-            _tetherCurrentLength = (_grapplePoint - transform.position).magnitude;
-            if (Time.timeScale == 0f)
-            {
-                return;
-            }
-            Time.timeScale = 0f;
-            StartCoroutine(PauseGame(TetherShootPauseSeconds));
+        if (!SearchForGrapplePoint(out _grapplePoint))
+        {
+            return;
         }
+        
+        _lineRenderer.enabled = true;
+        _tetherExtending = true;
+        _lineRenderer.SetPosition(0, transform.position);
+        _lineRenderer.SetPosition(1, transform.position);
+        _tetherCurrentLength = (_grapplePoint - transform.position).magnitude;
+        if (Time.timeScale == 0f)
+        {
+            return;
+        }
+        Time.timeScale = 0f;
+        StartCoroutine(PauseGame(TetherShootPauseSeconds));
+    }
+
+    private bool SearchForGrapplePoint(out Vector3 grapplePoint)
+    {
+        grapplePoint = Vector3.zero;
+
+        Vector3 searchEndPoint;
+        
+        if (Physics.Raycast(_tetherRaycast, out RaycastHit hit, TetherMaxLength, 1 | 1 << 6))
+        {
+            if (hit.collider.gameObject.layer == 6)
+            { // We hit a crystal, so return the hit point as is.
+                grapplePoint = hit.point;
+                return true;
+            }
+            
+            if (SearchInSphereForCollider(out Collider c, hit.point, 1 << 6))
+            { // There's a collider in range at the hit point, so return that.
+                grapplePoint = c.gameObject.transform.position;
+                return true;
+            }
+
+            searchEndPoint = hit.point; 
+        }
+        else
+        {
+            searchEndPoint = gameObject.transform.position + (_tetherRaycast.direction * TetherMaxLength);
+        }
+        
+        // Finally, try an iterative search from player to end point for last aim assist check.
+        Vector3 searchPoint = gameObject.transform.position;
+        Vector3 searchDirection = _tetherRaycast.direction;
+
+        int searchSteps = (int) ( (searchPoint - searchEndPoint).magnitude / AimAssistRadius );
+        
+        for (int i = 0; i < searchSteps; i++)
+        {
+            searchPoint += searchDirection * (AimAssistRadius * 2);
+            if (SearchInSphereForCollider(out Collider c, searchPoint, 1 << 6))
+            {
+                grapplePoint = c.gameObject.transform.position;
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
+    private bool SearchInSphereForCollider(out Collider collider, Vector3 searchPosition, int layerMask)
+    {
+        collider = null;
+        Collider[] nearbyColliders = new Collider[10];
+        int colliderCount = Physics.OverlapSphereNonAlloc(searchPosition, AimAssistRadius, nearbyColliders, layerMask);
+            
+        if (colliderCount == 0)
+        {
+            return false;
+        }
+
+
+        Collider closestCollider = nearbyColliders[0];
+        float closestDistance = float.PositiveInfinity;
+
+        for (int i = 0; i < colliderCount; i++)
+        {
+            Collider c = nearbyColliders[i];
+            float distance = (searchPosition - c.gameObject.transform.position).magnitude;
+            if (distance < closestDistance)
+            {
+                closestCollider = c;
+                closestDistance = distance;
+            }
+        }
+
+        collider = closestCollider;
+        return true;
     }
 
     /**
-     * Extends the line renderer until it reaches the grapple point. 
+     * Extends the line renderer until it reaches the grapple point.
      */
     private void ExtendTether()
     {
