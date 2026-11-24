@@ -1,10 +1,12 @@
 using UnityEngine;
 
-
-public class SurfaceSampler : MonoBehaviour
+/**
+ * Detects the surface type at a given position in the world.
+ */
+public static class SurfaceSampler
 {
     // Get the terrain mix at a given position.
-    private float[] GetTextureMix(Vector3 samplePosition, Terrain terrain)
+    private static float[] GetTextureMix(Vector3 samplePosition, Terrain terrain)
     {
         Vector3 terrainPosition = terrain.transform.position;
         TerrainData terrainData = terrain.terrainData;
@@ -27,7 +29,7 @@ public class SurfaceSampler : MonoBehaviour
         return cellMix;
     }
 
-    public SurfaceAudioLibrary.SurfaceType GetSurfaceTypeFromTerrain(Vector3 samplePosition, Terrain terrain)
+    public static SurfaceAudioLibrary.SurfaceType GetSurfaceTypeFromTerrain(Vector3 samplePosition, Terrain terrain)
     {
         float[] cellMix = GetTextureMix(samplePosition, terrain);
         float strongestTexture = 0;

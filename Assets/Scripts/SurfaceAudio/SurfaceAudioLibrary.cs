@@ -31,7 +31,7 @@ public class SurfaceAudioLibrary : ScriptableObject
             case "TL_Clay": return SurfaceType.Dirt;
             case "TL_Grass": return SurfaceType.Grass;
             case "TL_Stone": return SurfaceType.Stone;
-            case "TL_Snow": case "TL_DarkSnow": return SurfaceType.Snow;
+            case "TL_Snow": case "TL_SnowDark": return SurfaceType.Snow;
             case "TL_Swamp": return SurfaceType.Mud;
         }
 
