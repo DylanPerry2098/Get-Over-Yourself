@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     public Camera camera;
     public InputHandler inputHandler;
     
-    private SurfaceSampler _SurfaceSampler;
+    // private SurfaceSampler _SurfaceSampler;
 
     [Header("Controls")] public float playerSpeed = 5.0f;
     public float jumpHeight = 10f;
@@ -74,7 +74,7 @@ public class PlayerController : MonoBehaviour
         _lineMaterial = _lineRenderer.material;
         _lineRenderer.enabled = false;
 
-        _SurfaceSampler = GetComponent<SurfaceSampler>();
+        // _SurfaceSampler = GetComponent<SurfaceSampler>();
     
         _tetherRaycast = new Ray(transform.position, camera.transform.forward);
         
@@ -117,7 +117,7 @@ public class PlayerController : MonoBehaviour
 
         LeashSelf();
 
-        print(_SurfaceSampler.GetSurfaceTypeFromTerrain(gameObject.transform.position, Terrain.activeTerrain));
+        print(SurfaceSampler.GetSurfaceTypeFromTerrain(gameObject.transform.position, Terrain.activeTerrain));
     }
 
     void UpdateLineColor()
