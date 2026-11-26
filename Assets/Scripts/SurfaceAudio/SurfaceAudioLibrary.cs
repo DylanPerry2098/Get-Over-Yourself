@@ -7,7 +7,7 @@ using System.Collections.Generic;
  */
 [CreateAssetMenu(
     fileName = "SurfaceAudioLibrary",
-    menuName = "Audio/Footstep Library"
+    menuName = "Audio/Surface Audio Library"
 )]
 public class SurfaceAudioLibrary : ScriptableObject
 {
@@ -23,6 +23,8 @@ public class SurfaceAudioLibrary : ScriptableObject
     [SerializeField] public Dictionary<SurfaceType, AudioClip[]> SoundsBySurface = new Dictionary<SurfaceType, AudioClip[]>();
 
     [SerializeField] public Dictionary<SurfaceType, string> FilePathBySurface = new Dictionary<SurfaceType, string>();
+
+    [SerializeField] public string mustContainString;
 
     public static SurfaceType TerrainNameToSurfaceType(string name)
     {

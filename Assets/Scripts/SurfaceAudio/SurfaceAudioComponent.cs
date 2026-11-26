@@ -9,9 +9,9 @@ public class SurfaceAudioComponent : MonoBehaviour
     private SurfaceAudioLibrary audioLibrary;
 
     [SerializeField]
-    private Dictionary<SurfaceAudioLibrary.SurfaceType, RandomAudioClip> randomAudioClipBySurface = new Dictionary<SurfaceAudioLibrary.SurfaceType, RandomAudioClip>();
+    private readonly Dictionary<SurfaceAudioLibrary.SurfaceType, RandomAudioClip> _randomAudioClipBySurface = new Dictionary<SurfaceAudioLibrary.SurfaceType, RandomAudioClip>();
 
-    [SerializeField] private AudioSource audioSource;
+    [SerializeField] public AudioSource audioSource;
 
     private void Start()
     {
@@ -25,18 +25,18 @@ public class SurfaceAudioComponent : MonoBehaviour
             
             RandomAudioClip rac = gameObject.AddComponent<RandomAudioClip>();
             rac.clips = entry.Value;
-            randomAudioClipBySurface[entry.Key] = rac;
+            _randomAudioClipBySurface[entry.Key] = rac;
         }
     }
 
     public void PlaySound(SurfaceAudioLibrary.SurfaceType surfaceType)
     {
-        if (!randomAudioClipBySurface.ContainsKey(surfaceType))
+        if (!_randomAudioClipBySurface.ContainsKey(surfaceType))
         {
             Debug.LogWarning("Surface type " + surfaceType + " not found in library");
         }
 
-        audioSource.clip = randomAudioClipBySurface[surfaceType].GetClip();
+        audioSource.clip = _randomAudioClipBySurface[surfaceType].GetClip();
         audioSource.Play();
     }
 }

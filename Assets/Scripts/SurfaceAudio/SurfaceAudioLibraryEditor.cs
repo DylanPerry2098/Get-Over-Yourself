@@ -29,7 +29,7 @@ public class SurfaceAudioLibraryEditor : Editor
 
         foreach (KeyValuePair<SurfaceAudioLibrary.SurfaceType, string> entry in library.FilePathBySurface)
         {
-            library.SoundsBySurface[entry.Key] = LoadClips(entry.Value);
+            library.SoundsBySurface[entry.Key] = LoadClips(entry.Value, library.mustContainString);
         }
         
         EditorUtility.SetDirty(library);
@@ -38,10 +38,10 @@ public class SurfaceAudioLibraryEditor : Editor
         Debug.Log("Surface Library Generated!");
     }
 
-    private AudioClip[] LoadClips(string folderPath)
+    private AudioClip[] LoadClips(string folderPath, string searchTerm)
     {
         string[] guids = AssetDatabase.FindAssets(
-            "t:AudioClip",
+            searchTerm + " t:AudioClip",
             new[] { folderPath }
         );
         

@@ -27,6 +27,7 @@ public class FallState : State
         
         if (isGrounded && player.velocity.y <= 0)
         {
+            player.PlayLandAudio();
             player.velocity.y = groundingForce;
             if (moveInput.magnitude > 0)
             {

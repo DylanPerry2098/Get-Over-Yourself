@@ -6,7 +6,7 @@ public class JumpState : State
     {
         base.Enter();
         player.velocity.y += player.jumpHeight;
+        player.PlayJumpAudio();
         stateMachine.ChangeState(player.fallState);
-
     }
 }

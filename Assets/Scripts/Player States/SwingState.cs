@@ -19,6 +19,7 @@ public class SwingState : State
         base.StateUpdate();
         if (isGrounded)
         {
+            player.PlayLandAudio();
             stateMachine.ChangeState(player.idleState);
             return;
         }
@@ -72,4 +73,5 @@ public class SwingState : State
         player.controller.Move(player.velocity * Time.deltaTime);
 
     }
+    
 }

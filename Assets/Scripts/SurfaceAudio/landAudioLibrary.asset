@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cc8c9d4e2207e94389fbda222ff8e4f, type: 3}
+  m_Name: landAudioLibrary
+  m_EditorClassIdentifier: Assembly-CSharp::SurfaceAudioLibrary
+  SoundsBySurface:
+  - key: 0
+    value:
+    - {fileID: 8300000, guid: 7131d701ae015a54aa3d856feccd513f, type: 3}
+    - {fileID: 8300000, guid: 942019cf9ecd5854ebeb343b12b7f779, type: 3}
+    - {fileID: 8300000, guid: 1a88f429c4a7b734f9c4254f0c654cea, type: 3}
+  - key: 1
+    value:
+    - {fileID: 8300000, guid: 6aeefb601c305f64487cebdfacae5b6c, type: 3}
+    - {fileID: 8300000, guid: a967f92e38352bb4291945423de63499, type: 3}
+    - {fileID: 8300000, guid: 856b6d74addb9ad4ab2b7b47bae3e839, type: 3}
+    - {fileID: 8300000, guid: f2bc9c36f73ea50419060ec6eb40c246, type: 3}
+    - {fileID: 8300000, guid: 09226248e570c904a900ec2ecb767a68, type: 3}
+    - {fileID: 8300000, guid: ccfb18eb53b37384b9632ae00f725881, type: 3}
+    - {fileID: 8300000, guid: 8e0c586341010324fadd73453569f0aa, type: 3}
+    - {fileID: 8300000, guid: eb491a4de6595a246bbef0f211e2bd73, type: 3}
+    - {fileID: 8300000, guid: 54cd8769272b7ca4c9a1386d106f621d, type: 3}
+    - {fileID: 8300000, guid: 7d65afb5fe7bb7e41a03b001f5acfbde, type: 3}
+  - key: 2
+    value:
+    - {fileID: 8300000, guid: 3d8f480d252db9449b2f978284506f8e, type: 3}
+    - {fileID: 8300000, guid: 79e6e1370ee1ca747b469e68d0dcb0fe, type: 3}
+    - {fileID: 8300000, guid: b796f7e3b1a4d7344b7ee8d6c077a68f, type: 3}
+    - {fileID: 8300000, guid: 1f080a1e65d584c4ca3e3c75fbb406b3, type: 3}
+    - {fileID: 8300000, guid: 45bc125cb8cb195408490bec63fde615, type: 3}
+    - {fileID: 8300000, guid: c2e0d3f88cb48f240af40a1f1bac7e8c, type: 3}
+  - key: 3
+    value:
+    - {fileID: 8300000, guid: bb5ec83ccc5c69f43b31f100278bff91, type: 3}
+    - {fileID: 8300000, guid: 623ad07c146cedd4db6b902fd1612618, type: 3}
+  - key: 4
+    value:
+    - {fileID: 8300000, guid: 1704430881abe874391385f39be8f965, type: 3}
+    - {fileID: 8300000, guid: 63e0175a58364a14d874cf6a4602923b, type: 3}
+    - {fileID: 8300000, guid: a61b7ab6f7e2e02448092c5fd131df52, type: 3}
+    - {fileID: 8300000, guid: 8ef64626ce5b7e149b05c909f7f26218, type: 3}
+    - {fileID: 8300000, guid: 17294eb08ece64144823d4e09b117d63, type: 3}
+    - {fileID: 8300000, guid: b27347ebdc5a70b42876b9af0e9e1a41, type: 3}
+    - {fileID: 8300000, guid: 2d59a6a98991e964ebb879bed14e8b9c, type: 3}
+    - {fileID: 8300000, guid: 5039e24f35fce8b4ea426f1543234bba, type: 3}
+    - {fileID: 8300000, guid: 1ff6a117a03dee04fbb869f5f41037a0, type: 3}
+    - {fileID: 8300000, guid: 5e489ad30bcbab44d81608af00695302, type: 3}
+    - {fileID: 8300000, guid: dfeacf04bb644374ab5ab503cb4eaff7, type: 3}
+  - key: 5
+    value:
+    - {fileID: 8300000, guid: 371c7554d1d165146a79898daa807134, type: 3}
+    - {fileID: 8300000, guid: efa8d9408cf5dd1469f24a64eabb7b0d, type: 3}
+    - {fileID: 8300000, guid: 09285afe64b606044b4bba58b6cced49, type: 3}
+    - {fileID: 8300000, guid: 7eeb546a06967a149a37ea3e205b518b, type: 3}
+    - {fileID: 8300000, guid: 26ba84cde900f02408eaef46d1af7811, type: 3}
+  FilePathBySurface:
+  - key: 0
+    value: Assets/Footsteps - Essentials/Footsteps_DirtyGround/Footsteps_DirtyGround_Land
+  - key: 1
+    value: Assets/Footsteps - Essentials/Footsteps_Grass/Footsteps_Grass_Jump
+  - key: 2
+    value: Assets/Footsteps - Essentials/Footsteps_Rock/Footsteps_Rock_Jump
+  - key: 3
+    value: Assets/Footsteps - Essentials/Footsteps_Wood/Footsteps_Wood_Jump
+  - key: 4
+    value: Assets/Footsteps - Essentials/Footsteps_Snow/Footsteps_Snow_Jump
+  - key: 5
+    value: Assets/Footsteps - Essentials/Footsteps_Mud/Footsteps_Mud_Jump
+  mustContainString: land

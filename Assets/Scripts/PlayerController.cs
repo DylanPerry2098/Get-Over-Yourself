@@ -2,9 +2,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-// TODO: resolve all JetBrains warnings
-// TODO: comment code and make terminology consistent
-
 public class PlayerController : MonoBehaviour
 {
     [Header("Objects")] public CharacterController controller;
@@ -12,8 +9,6 @@ public class PlayerController : MonoBehaviour
     public Camera camera;
     public InputHandler inputHandler;
     
-    // private SurfaceSampler _SurfaceSampler;
-
     [Header("Controls")] public float playerSpeed = 5.0f;
     public float jumpHeight = 10f;
     public float gravityMultiplier = 3.0f;
@@ -23,7 +18,12 @@ public class PlayerController : MonoBehaviour
     private Ray _tetherRaycast;
     private LineRenderer _lineRenderer;
     private Material _lineMaterial;
-    [SerializeField] private RandomAudioClip _crystalChimeRandomClip;
+    [SerializeField] private RandomAudioClip crystalChimeRandomClip;
+    [SerializeField] private AudioSource airWooshAudioSource;
+    
+    private SurfaceAudioComponent _footstepAudio;
+    private SurfaceAudioComponent _jumpAudio;
+    private SurfaceAudioComponent _landAudio;
     
     private const float TetherMinLength = 1f;
     private const float TetherMaxLength = 15f;
@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
 
     private const float AimAssistRadius = 8f;
 
-    private readonly Color _maxTensionColor = Color.saddleBrown;
+    private readonly Color _maxTensionColor = Color.mediumPurple;
     private readonly Color _slackColor = Color.softYellow;
     private const float TetherLengthToFullSlack = 2.5f;
     
@@ -71,11 +71,13 @@ public class PlayerController : MonoBehaviour
         _tetherCurrentLength = TetherMaxLength;
         camera = GetComponentInChildren<Camera>();
         _lineRenderer = GetComponent<LineRenderer>();
+        var audioComponents = GetComponents<SurfaceAudioComponent>();
+        _footstepAudio = audioComponents[0];
+        _jumpAudio = audioComponents[1];
+        _landAudio = audioComponents[2];
         _lineMaterial = _lineRenderer.material;
         _lineRenderer.enabled = false;
-
-        // _SurfaceSampler = GetComponent<SurfaceSampler>();
-    
+        
         _tetherRaycast = new Ray(transform.position, camera.transform.forward);
         
         velocity.y = -2.0f;
@@ -117,10 +119,14 @@ public class PlayerController : MonoBehaviour
 
         LeashSelf();
 
-        print(SurfaceSampler.GetSurfaceTypeFromTerrain(gameObject.transform.position, Terrain.activeTerrain));
+        float volume = velocity.magnitude < 8f ? 0f : (velocity.magnitude-8f) / 20f;
+        
+        SetAirWooshAudioVolume(volume);
+        
+
     }
 
-    void UpdateLineColor()
+    private void UpdateLineColor()
     {
         _lineMaterial.color = Color.Lerp(_maxTensionColor, _slackColor, (_tetherCurrentLength - _distanceToGrapplePoint)/TetherLengthToFullSlack);
     }
@@ -142,7 +148,7 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-        AudioSource.PlayClipAtPoint(_crystalChimeRandomClip.GetClip(), _grapplePoint);
+        AudioSource.PlayClipAtPoint(crystalChimeRandomClip.GetClip(), _grapplePoint);
         _lineRenderer.enabled = true;
         _tetherExtending = true;
         _lineRenderer.SetPosition(0, transform.position);
@@ -307,5 +313,69 @@ public class PlayerController : MonoBehaviour
     private void OnApplicationFocus(bool hasFocus)
     {
         Cursor.lockState = hasFocus ? CursorLockMode.Locked : CursorLockMode.None;
+    }
+
+
+    public void PlayFootstepAudio()
+    {
+        PlaySurfaceAudio(_footstepAudio);
+    }
+
+    public void PlayJumpAudio()
+    {
+        PlaySurfaceAudio(_jumpAudio);
+    }
+
+    public void PlayLandAudio()
+    {
+        PlaySurfaceAudio(_landAudio);
+    }
+    
+    private void PlaySurfaceAudio(SurfaceAudioComponent sac)
+    {
+        RaycastHit hit;
+        
+        Physics.Raycast(transform.position, Vector3.down, out hit, 2f);
+
+        if (hit.collider == null)
+        {
+            return;
+            
+        }
+
+        Collider colliderStandingOn = hit.collider;
+
+        SurfaceAudioLibrary.SurfaceType surfaceType;
+
+        if (colliderStandingOn is TerrainCollider)
+        {
+            surfaceType = SurfaceSampler.GetSurfaceTypeFromTerrain(transform.position, Terrain.activeTerrain);
+        }
+        else
+        {
+            GameObject objectStandingOn = colliderStandingOn.gameObject;
+            string objectname = objectStandingOn.name;
+            if (objectname.Contains("Pier"))
+            {
+                surfaceType = SurfaceAudioLibrary.SurfaceType.Wood;
+            } else if (objectname.Contains("rock"))
+            {
+                surfaceType = SurfaceAudioLibrary.SurfaceType.Stone;
+            }
+            else
+            {
+                surfaceType = SurfaceAudioLibrary.SurfaceType.Dirt;    
+            }
+        }
+        
+        sac.PlaySound(
+            surfaceType
+        );
+    }
+    
+
+    private void SetAirWooshAudioVolume(float v)
+    {
+        airWooshAudioSource.volume = v;
     }
 }

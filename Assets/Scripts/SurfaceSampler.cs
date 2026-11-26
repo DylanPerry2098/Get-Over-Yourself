@@ -3,7 +3,7 @@ using UnityEngine;
 /**
  * Detects the surface type at a given position in the world.
  */
-public static class SurfaceSampler
+public static class SurfaceSampler 
 {
     // Get the terrain mix at a given position.
     private static float[] GetTextureMix(Vector3 samplePosition, Terrain terrain)
