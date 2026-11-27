@@ -147,7 +147,7 @@ public class PlayerController : MonoBehaviour
             _grapplePoint = Vector3.negativeInfinity;
             _lineRenderer.enabled = false;
             _tetherExtending = false;
-            audioSource.PlayOneShot(tetherUnthrowRandomClip.GetClip());
+            audioSource.PlayOneShot(tetherUnthrowRandomClip.GetClip(), 0.6f);
             reelAudioSource.Stop();
             return;
         }
@@ -160,7 +160,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        audioSource.PlayOneShot(tetherThrowRandomClip.GetClip());
+        audioSource.PlayOneShot(tetherThrowRandomClip.GetClip(), 0.6f);
         reelAudioSource.Play();
         reelAudioSource.volume = 0f;
         AudioSource.PlayClipAtPoint(crystalChimeRandomClip.GetClip(), _grapplePoint);
@@ -338,7 +338,7 @@ public class PlayerController : MonoBehaviour
 
     public void PlayFootstepAudio()
     {
-        PlaySurfaceAudio(footstepAudio, 1f);
+        PlaySurfaceAudio(footstepAudio, 0.45f);
     }
 
     public void PlayJumpAudio()
