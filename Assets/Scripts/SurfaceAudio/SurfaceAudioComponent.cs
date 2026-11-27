@@ -29,14 +29,14 @@ public class SurfaceAudioComponent : MonoBehaviour
         }
     }
 
-    public void PlaySound(SurfaceAudioLibrary.SurfaceType surfaceType)
+    public void PlaySound(SurfaceAudioLibrary.SurfaceType surfaceType, float volume)
     {
         if (!_randomAudioClipBySurface.ContainsKey(surfaceType))
         {
             Debug.LogWarning("Surface type " + surfaceType + " not found in library");
         }
 
-        audioSource.clip = _randomAudioClipBySurface[surfaceType].GetClip();
-        audioSource.Play();
+        // audioSource.clip = _randomAudioClipBySurface[surfaceType].GetClip();
+        audioSource.PlayOneShot(_randomAudioClipBySurface[surfaceType].GetClip(), volume);
     }
 }

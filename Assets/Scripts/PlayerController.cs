@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -13,34 +14,21 @@ public class PlayerController : MonoBehaviour
     public float jumpHeight = 10f;
     public float gravityMultiplier = 3.0f;
     public float maxFallSpeed = -25f;
-
+    public Vector3 velocity;
+    
     [Header("Grapple")]
-    private Ray _tetherRaycast;
-    private LineRenderer _lineRenderer;
-    private Material _lineMaterial;
-    [SerializeField] private RandomAudioClip crystalChimeRandomClip;
-    [SerializeField] private AudioSource airWooshAudioSource;
-    [SerializeField] private AudioSource landAudioSource;
-    
-    [SerializeField] private RandomAudioClip tetherThrowRandomClip;
-    [SerializeField] private RandomAudioClip tetherUnthrowRandomClip;
-    [SerializeField] private AudioSource reelAudioSource;
-    [SerializeField] private AudioSource tetherAudioSource;
-    
-    private SurfaceAudioComponent _footstepAudio;
-    private SurfaceAudioComponent _jumpAudio;
-    private SurfaceAudioComponent _landAudio;
-    
     private const float TetherMinLength = 1f;
     private const float TetherMaxLength = 15f;
     private const float TetherRetractExtendSpeed = 10f;
     private const float TetherShootPauseSeconds = 0.1f;
-
     private const float AimAssistRadius = 8f;
-
     private readonly Color _maxTensionColor = Color.mediumPurple;
     private readonly Color _slackColor = Color.softYellow;
     private const float TetherLengthToFullSlack = 2.5f;
+    
+    private Ray _tetherRaycast;
+    private LineRenderer _lineRenderer;
+    private Material _lineMaterial;
     
     private float _tetherCurrentLength;
     private float _distanceToGrapplePoint;
@@ -48,6 +36,19 @@ public class PlayerController : MonoBehaviour
     private bool _tetherExtending;
 
     private Vector3 _lastFrameVelocity;
+    
+    [Header("Sounds")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioSource airWooshAudioSource;
+    [SerializeField] private AudioSource reelAudioSource;
+    
+    [SerializeField] private RandomAudioClip crystalChimeRandomClip;
+    [SerializeField] private RandomAudioClip tetherThrowRandomClip;
+    [SerializeField] private RandomAudioClip tetherUnthrowRandomClip;
+    
+    [SerializeField] private SurfaceAudioComponent footstepAudio;
+    [SerializeField] private SurfaceAudioComponent jumpAudio;
+    [SerializeField] private SurfaceAudioComponent landAudio;
 
     [Header("Smoothing")]
     // [Range(0, 1)] 
@@ -71,18 +72,12 @@ public class PlayerController : MonoBehaviour
     [HideInInspector] public float gravityValue = -9.8f;
     [HideInInspector] public Vector3 direction;
 
-    public Vector3 velocity;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
         _tetherCurrentLength = TetherMaxLength;
         camera = GetComponentInChildren<Camera>();
         _lineRenderer = GetComponent<LineRenderer>();
-        var audioComponents = GetComponents<SurfaceAudioComponent>();
-        _footstepAudio = audioComponents[0];
-        _jumpAudio = audioComponents[1];
-        _landAudio = audioComponents[2];
         _lineMaterial = _lineRenderer.material;
         _lineRenderer.enabled = false;
         
@@ -152,8 +147,7 @@ public class PlayerController : MonoBehaviour
             _grapplePoint = Vector3.negativeInfinity;
             _lineRenderer.enabled = false;
             _tetherExtending = false;
-            tetherAudioSource.clip = tetherUnthrowRandomClip.GetClip();
-            tetherAudioSource.Play();
+            audioSource.PlayOneShot(tetherUnthrowRandomClip.GetClip());
             reelAudioSource.Stop();
             return;
         }
@@ -166,8 +160,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        tetherAudioSource.clip = tetherThrowRandomClip.GetClip();
-        tetherAudioSource.Play();
+        audioSource.PlayOneShot(tetherThrowRandomClip.GetClip());
         reelAudioSource.Play();
         reelAudioSource.volume = 0f;
         AudioSource.PlayClipAtPoint(crystalChimeRandomClip.GetClip(), _grapplePoint);
@@ -345,22 +338,21 @@ public class PlayerController : MonoBehaviour
 
     public void PlayFootstepAudio()
     {
-        PlaySurfaceAudio(_footstepAudio);
+        PlaySurfaceAudio(footstepAudio, 1f);
     }
 
     public void PlayJumpAudio()
     {
-        PlaySurfaceAudio(_jumpAudio);
+        PlaySurfaceAudio(jumpAudio, 1f);
     }
 
     public void PlayLandAudio()
     {
         float hitGroundSpeed = _lastFrameVelocity.magnitude;
-        landAudioSource.volume = hitGroundSpeed / 30f;
-        PlaySurfaceAudio(_landAudio);
+        PlaySurfaceAudio(landAudio, hitGroundSpeed / 30f);
     }
     
-    private void PlaySurfaceAudio(SurfaceAudioComponent sac)
+    private void PlaySurfaceAudio(SurfaceAudioComponent sac, float volume)
     {
         RaycastHit hit;
         
@@ -398,7 +390,7 @@ public class PlayerController : MonoBehaviour
         }
         
         sac.PlaySound(
-            surfaceType
+            surfaceType, volume
         );
     }
     
