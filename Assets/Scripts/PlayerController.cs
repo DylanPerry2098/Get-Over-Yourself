@@ -22,6 +22,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AudioSource airWooshAudioSource;
     [SerializeField] private AudioSource landAudioSource;
     
+    [SerializeField] private RandomAudioClip tetherThrowRandomClip;
+    [SerializeField] private RandomAudioClip tetherUnthrowRandomClip;
+    [SerializeField] private AudioSource reelAudioSource;
+    [SerializeField] private AudioSource tetherAudioSource;
+    
     private SurfaceAudioComponent _footstepAudio;
     private SurfaceAudioComponent _jumpAudio;
     private SurfaceAudioComponent _landAudio;
@@ -115,9 +120,15 @@ public class PlayerController : MonoBehaviour
         if (inputHandler.WantsToRetract())
         {
             ExtendOrRetract(-Time.deltaTime * TetherRetractExtendSpeed);
+            reelAudioSource.pitch = 1f;
         } else if (inputHandler.WantsToExtend())
         {
             ExtendOrRetract(Time.deltaTime * TetherRetractExtendSpeed);
+            reelAudioSource.pitch = -3f;
+        }
+        else
+        {
+            reelAudioSource.volume = 0f;
         }
 
         LeashSelf();
@@ -141,6 +152,9 @@ public class PlayerController : MonoBehaviour
             _grapplePoint = Vector3.negativeInfinity;
             _lineRenderer.enabled = false;
             _tetherExtending = false;
+            tetherAudioSource.clip = tetherUnthrowRandomClip.GetClip();
+            tetherAudioSource.Play();
+            reelAudioSource.Stop();
             return;
         }
         _tetherRaycast.origin = transform.position;
@@ -151,6 +165,11 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
+
+        tetherAudioSource.clip = tetherThrowRandomClip.GetClip();
+        tetherAudioSource.Play();
+        reelAudioSource.Play();
+        reelAudioSource.volume = 0f;
         AudioSource.PlayClipAtPoint(crystalChimeRandomClip.GetClip(), _grapplePoint);
         _lineRenderer.enabled = true;
         _tetherExtending = true;
@@ -292,10 +311,15 @@ public class PlayerController : MonoBehaviour
         if (_tetherCurrentLength < TetherMinLength)
         {
             _tetherCurrentLength = TetherMinLength;
+            reelAudioSource.volume = 0f;
         } else if (_tetherCurrentLength > TetherMaxLength)
         {
             _tetherCurrentLength = TetherMaxLength;
-        }
+            reelAudioSource.volume = 0f;
+        } else
+        {
+            reelAudioSource.volume = 1f;
+        } 
     }
 
     public bool IsTethered()
