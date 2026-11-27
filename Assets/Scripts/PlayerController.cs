@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     private Material _lineMaterial;
     [SerializeField] private RandomAudioClip crystalChimeRandomClip;
     [SerializeField] private AudioSource airWooshAudioSource;
+    [SerializeField] private AudioSource landAudioSource;
     
     private SurfaceAudioComponent _footstepAudio;
     private SurfaceAudioComponent _jumpAudio;
@@ -40,6 +41,8 @@ public class PlayerController : MonoBehaviour
     private float _distanceToGrapplePoint;
     private Vector3 _grapplePoint;
     private bool _tetherExtending;
+
+    private Vector3 _lastFrameVelocity;
 
     [Header("Smoothing")]
     // [Range(0, 1)] 
@@ -122,8 +125,8 @@ public class PlayerController : MonoBehaviour
         float volume = velocity.magnitude < 8f ? 0f : (velocity.magnitude-8f) / 20f;
         
         SetAirWooshAudioVolume(volume);
-        
 
+        _lastFrameVelocity = velocity;
     }
 
     private void UpdateLineColor()
@@ -328,6 +331,8 @@ public class PlayerController : MonoBehaviour
 
     public void PlayLandAudio()
     {
+        float hitGroundSpeed = _lastFrameVelocity.magnitude;
+        landAudioSource.volume = hitGroundSpeed / 30f;
         PlaySurfaceAudio(_landAudio);
     }
     

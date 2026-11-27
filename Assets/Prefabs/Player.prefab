@@ -386,9 +386,10 @@ MonoBehaviour:
   playerSpeed: 5
   jumpHeight: 10
   gravityMultiplier: 3
-  maxFallSpeed: -25
+  maxFallSpeed: -50
   crystalChimeRandomClip: {fileID: 3298059802107571911}
   airWooshAudioSource: {fileID: 7735607091451455608}
+  landAudioSource: {fileID: 1401914657115413359}
   airControl: 0.75
   movementSm: {fileID: 5593913104507148571}
   idleState: {fileID: 2000893062496335237}
