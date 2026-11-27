@@ -16,8 +16,6 @@ public class HeightAmbienceController : MonoBehaviour
 
     [SerializeField] private float crossfadeSmoothing = 1f;
     
-    
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         if (lowerYBound > upperYBound)
@@ -43,8 +41,6 @@ public class HeightAmbienceController : MonoBehaviour
         {
             topAudioSource.volume += (Math.Sign(_topTargetVolume - topAudioSource.volume) * Time.deltaTime) / crossfadeSmoothing;
         }
-        
-        print(bottomAudioSource.volume + " | " + topAudioSource.volume);
     }
 
     void SampleHeight()
@@ -54,7 +50,6 @@ public class HeightAmbienceController : MonoBehaviour
             1f,
             (_lastSampledHeight - lowerYBound) / (upperYBound-lowerYBound)
         );
-        print("Ratio: " + ratio);
         _bottomTargetVolume = 1f - ratio;
         _topTargetVolume = ratio;
     }
